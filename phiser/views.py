@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from ipware import get_client_ip
+from ipaddr import client_ip
 
 # Create your views here.
 
@@ -10,7 +11,8 @@ from .models import (
 )
 
 def webPhising_view(request, cat, name):
-    ip, is_routable = get_client_ip(request, request_header_order=['X_FORWARDED_FOR', 'REMOTE_ADDR'])
+    # ip, is_routable = get_client_ip(request, request_header_order=['X_FORWARDED_FOR', 'REMOTE_ADDR'])
+    ip = client_ip(request)
     web_objs = get_object_or_404(PhisingWeb, cat_parse=cat, name_parse=name)
 
     TrackRecord.objects.create(
